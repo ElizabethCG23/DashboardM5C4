@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factores de riesgo en cáncer de próstata</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    </head>
+<body>
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+    </head>
+<body>
+    <div id="tooltip" class="tooltip"></div>
+
+    </body>
+</html>
+    <header id="header">
+        <h1>Factores de riesgo en cáncer de próstata: un análisis interactivo</h1>
+        <p>Este dashboard explora la relación entre diversos factores de estilo de vida, salud y el nivel de riesgo de cáncer de próstata, basándose en un conjunto de datos sintético.</p>
+    </header>
+
+    <main class="dashboard-container">
+        <aside id="filters-panel">
+            <h2>Filtros</h2>
+            <div class="filter-group">
+                <label for="age-slider">Edad:</label>
+                <input type="range" id="age-slider" min="18" max="90" value="18">
+                <span id="age-value">18+</span>
+            </div>
+
+            <div class="filter-group">
+                <label for="activity-select">Nivel de actividad:</label>
+                <select id="activity-select">
+                    <option value="All">Todos</option>
+                    <option value="Low">Bajo</option>
+                    <option value="Moderate">Moderado</option>
+                    <option value="High">Alto</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="smoker-select">Fumador:</label>
+                <select id="smoker-select">
+                    <option value="All">Todos</option>
+                    <option value="Yes">Sí</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="alcohol-select">Alcohol:</label>
+                <select id="alcohol-select">
+                    <option value="All">Todos</option>
+                    <option value="None">Ninguno</option>
+                    <option value="Moderate">Moderado</option>
+                    <option value="High">Alto</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="diet-select">Dieta:</label>
+                <select id="diet-select">
+                    <option value="All">Todas</option>
+                    <option value="Fatty">Grasa</option>
+                    <option value="Mixed">Mixta</option>
+                    <option value="Healthy">Saludable</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="checkup-select">Chequeos médicos:</label>
+                <select id="checkup-select">
+                    <option value="All">Todos</option>
+                    <option value="Yes">Sí</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="stress-select">Estrés mental:</label>
+                <select id="stress-select">
+                    <option value="All">Todos</option>
+                    <option value="Low">Bajo</option>
+                    <option value="Medium">Medio</option>
+                    <option value="High">Alto</option>
+                </select>
+            </div>
+            <button id="reset-filters">Restablecer Filtros</button>
+        </aside>
+
+        <section id="dashboard-content">
+            <div id="kpi-panel" class="grid-container">
+                <div class="kpi-card" id="kpi-risk-low">
+                    <h3>Riesgo Bajo</h3>
+                    <div class="kpi-value" style="color: green;">--%</div>
+                </div>
+                <div class="kpi-card" id="kpi-risk-medium">
+                    <h3>Riesgo Medio</h3>
+                    <div class="kpi-value" style="color: orange;">--%</div>
+                </div>
+                <div class="kpi-card" id="kpi-risk-high">
+                    <h3>Riesgo Alto</h3>
+                    <div class="kpi-value" style="color: red;">--%</div>
+                </div>
+                <div class="kpi-card" id="kpi-checkups">
+                    <h3>% Chequeos Regulares</h3>
+                    <div class="kpi-value">--%</div>
+                </div>
+                <div class="kpi-card" id="kpi-avg-age-risk">
+                    <h3>Edad Promedio por Riesgo</h3>
+                    <div class="kpi-value"></div>
+                </div>
+                <div class="kpi-card" id="kpi-avg-sleep-risk">
+                    <h3>Sueño Promedio por Riesgo</h3>
+                    <div class="kpi-value"></div>
+                </div>
+            </div>
+
+            <section class="chart-section">
+                <h2>I. Perfil general de riesgo</h2>
+                <div class="grid-container">
+                    <div class="chart-container" id="chart-age-risk">
+                        <h3>Distribución por Edad y Riesgo</h3>
+                        </div>
+                    <div class="chart-container" id="chart-bmi-risk">
+                        <h3>IMC vs Riesgo (Tamaño del punto = Horas de sueño)</h3>
+                        </div>
+                </div>
+            </section>
+
+            <section class="chart-section">
+                <h2>II. Estilo de vida y hábitos</h2>
+                <div class="grid-container">
+                    <div class="chart-container" id="chart-diet-activity-risk">
+                        <h3>Dieta & Actividad Física vs Riesgo</h3>
+                        </div>
+                    <div class="chart-container" id="chart-heatmap">
+                        <h3>Dieta + Alcohol + Estrés vs Riesgo</h3>
+                        </div>
+                </div>
+            </section>
+
+            <section class="chart-section">
+                <h2>III. Salud preventiva</h2>
+                <div class="grid-container">
+                    <div class="chart-container" id="chart-checkup-risk">
+                        <h3>Chequeo Médico vs Riesgo</h3>
+                        </div>
+                    <div class="kpi-card-standalone" id="kpi-no-checkup-high-risk">
+                        <h3>Personas sin Chequeo en Riesgo Alto</h3>
+                        <div class="kpi-value" style="font-size: 2.5em; color: firebrick;">--</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="chart-section">
+                <h2>Panel Exploratorio: Crea tu perfil</h2>
+                <div id="interactive-profile-controls" class="controls">
+                    <div class="filter-group">
+                        <label for="profile-age">Edad:</label>
+                        <input type="number" id="profile-age" min="18" max="90" value="50">
+                    </div>
+                    <div class="filter-group">
+                        <label for="profile-bmi">IMC:</label>
+                        <input type="number" id="profile-bmi" min="15" max="40" step="0.1" value="25.0">
+                    </div>
+                    <div class="filter-group">
+                        <label for="profile-smoker">Fumador:</label>
+                        <select id="profile-smoker">
+                            <option value="Yes">Sí</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="profile-alcohol">Alcohol:</label>
+                        <select id="profile-alcohol">
+                            <option value="None">Ninguno</option>
+                            <option value="Moderate">Moderado</option>
+                            <option value="High">Alto</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="profile-diet">Dieta:</label>
+                        <select id="profile-diet">
+                            <option value="Fatty">Grasa</option>
+                            <option value="Mixed">Mixta</option>
+                            <option value="Healthy">Saludable</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="profile-activity">Actividad:</label>
+                        <select id="profile-activity">
+                            <option value="Low">Bajo</option>
+                            <option value="Moderate">Moderado</option>
+                            <option value="High">Alto</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="profile-family-history">Historial Familiar:</label>
+                        <select id="profile-family-history">
+                            <option value="Yes">Sí</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="profile-stress">Estrés:</label>
+                        <select id="profile-stress">
+                            <option value="Low">Bajo</option>
+                            <option value="Medium">Medio</option>
+                            <option value="High">Alto</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="profile-sleep">Horas de Sueño:</label>
+                        <input type="number" id="profile-sleep" min="3" max="12" step="0.1" value="7.0">
+                    </div>
+                    <div class="filter-group">
+                        <label for="profile-checkup">Chequeo Médico:</label>
+                        <select id="profile-checkup">
+                            <option value="Yes">Sí</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="chart-container" id="chart-radar">
+                    <h3>Comparación de Perfiles por Nivel de Riesgo</h3>
+                    </div>
+                <div id="estimated-risk-display" class="kpi-card-standalone">
+                    <h3>Tu Riesgo Estimado: <span id="estimated-risk-value" style="font-size: 2em;">--</span></h3>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024. Datos: Conjunto de datos sintético.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
